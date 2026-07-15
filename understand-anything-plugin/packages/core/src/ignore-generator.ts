@@ -112,6 +112,19 @@ const TEST_PATTERN_GROUPS: Array<{ label: string; patterns: string[] }> = [
       "**/conftest.py",
     ],
   },
+  {
+    // Rust's dominant unit-test convention is inline `#[cfg(test)] mod
+    // tests { ... }` blocks that cannot be excluded by filename. The
+    // Rust Book (chapter 11.3) also describes extracting those blocks
+    // into a sibling `tests.rs` file — that extracted form is what a
+    // file-pattern rule can catch. Integration tests already live under
+    // tests/ (covered by EXACT_DIR_NAMES); benches/ was added in the
+    // same PR as this group.
+    label: "Rust",
+    patterns: [
+      "**/tests.rs",
+    ],
+  },
 ];
 
 /**

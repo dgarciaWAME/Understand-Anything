@@ -233,12 +233,19 @@ describe("generateStarterIgnoreFile", () => {
       expect(content).toContain("# **/conftest.py");
     });
 
+    it("includes Rust tests.rs per-module extraction convention", () => {
+      const content = generateStarterIgnoreFile(testDir);
+      expect(content).toContain("# Rust");
+      // Rust Book ch. 11.3 pattern — extracted sibling test module.
+      expect(content).toContain("# **/tests.rs");
+    });
+
     it("groups patterns under the JS / TS sub-header", () => {
       const content = generateStarterIgnoreFile(testDir);
       expect(content).toContain("# JS / TS");
     });
 
-    it("emits language groups in stable order: JS, C#, Java, Go, C++, Python", () => {
+    it("emits language groups in stable order: JS, C#, Java, Go, C++, Python, Rust", () => {
       const content = generateStarterIgnoreFile(testDir);
       const jsIdx = content.indexOf("# JS / TS");
       const csIdx = content.indexOf("# C# / .NET");
@@ -246,12 +253,14 @@ describe("generateStarterIgnoreFile", () => {
       const goIdx = content.indexOf("# Go");
       const cppIdx = content.indexOf("# C++");
       const pyIdx = content.indexOf("# Python");
+      const rustIdx = content.indexOf("# Rust");
       expect(jsIdx).toBeGreaterThan(-1);
       expect(csIdx).toBeGreaterThan(jsIdx);
       expect(javaIdx).toBeGreaterThan(csIdx);
       expect(goIdx).toBeGreaterThan(javaIdx);
       expect(cppIdx).toBeGreaterThan(goIdx);
       expect(pyIdx).toBeGreaterThan(cppIdx);
+      expect(rustIdx).toBeGreaterThan(pyIdx);
     });
 
     it("keeps all suggestions commented even with no detected dirs and no .gitignore", () => {
